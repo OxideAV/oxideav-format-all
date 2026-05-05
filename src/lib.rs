@@ -68,8 +68,20 @@ include!(concat!(env!("OUT_DIR"), "/force_link.rs"));
 /// Force-link sentinel — call this once at program startup (typically
 /// from `main()`) before [`RuntimeContext::with_all_features`].
 ///
+/// **Why this can't be automated**: Rust's link model only includes
+/// rlibs whose symbols something references. A `#[ctor::ctor]` fn or
+/// `#[used] static` inside `oxideav-format-all` doesn't help — if no
+/// consumer code references any symbol from this rlib, the linker
+/// drops the entire rlib (and the ctor / static with it). A build
+/// script `cargo:rustc-link-arg=-Wl,-u,SYMBOL` doesn't help either:
+/// Cargo applies `rustc-link-arg` from build scripts only to the
+/// build-scripted crate's own binaries, never to downstream consumers.
+///
+/// One short call from `main()` is the smallest possible footprint
+/// across every target.
+///
 /// One call is enough. The fn is a no-op at runtime — pure codegen
-/// barrier so LLVM doesn't elide the reference.
+/// barrier so LLVM doesn't elide the reference to [`FORCE_LINK`].
 #[inline(never)]
 pub fn ensure_linked() {
     // Reference FORCE_LINK so the linker can't claim it's unused.

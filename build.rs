@@ -35,7 +35,9 @@ fn main() {
     out.push_str("// pre-link DCE pass; `ensure_linked()` (in lib.rs) does a volatile\n");
     out.push_str("// read on it so consumers' main() can give the linker a definite\n");
     out.push_str("// reference.\n");
-    out.push_str("\n#[used]\npub static FORCE_LINK: &[fn(&mut oxideav_core::RuntimeContext)] = &[\n");
+    out.push_str(
+        "\n#[used]\npub static FORCE_LINK: &[fn(&mut oxideav_core::RuntimeContext)] = &[\n",
+    );
 
     for crate_name in &general {
         let krate = crate_name.replace('-', "_");
