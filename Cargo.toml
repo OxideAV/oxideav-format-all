@@ -11,6 +11,7 @@ description = "Virtual aggregator for oxideav — depends on every sibling codec
 readme = "README.md"
 keywords = ["oxideav", "multimedia", "aggregator", "virtual", "all"]
 categories = ["multimedia"]
+build = "build.rs"
 
 # This crate ships no source — `src/lib.rs` is empty. Its sole purpose
 # is to declare dependencies on every oxideav sibling crate so that
@@ -110,8 +111,10 @@ oxideav-http = "0.0"
 oxideav-image-filter = "0.1"
 oxideav-source = "0.1"
 
-# Hardware-accelerated codec crates (registered with priority 0;
-# preferred over the pure-Rust impls on macOS, no-op on other targets
-# since the crates are `#![cfg(target_os = "macos")]`).
+# Hardware-accelerated codec crates — macOS-only (the crates are
+# `#![cfg(target_os = "macos")]`). Listed under a target-cfg section so
+# the build.rs auto-gen knows to wrap their `register` fn pointers in
+# `#[cfg(target_os = "macos")]` inside `FORCE_LINK`.
+[target.'cfg(target_os = "macos")'.dependencies]
 oxideav-audiotoolbox = "0.0"
 oxideav-videotoolbox = "0.0"
