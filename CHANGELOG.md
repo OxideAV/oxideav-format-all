@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.1](https://github.com/OxideAV/oxideav-format-all/releases/tag/v0.0.1) - 2026-05-05
+
+### Other
+
+- explain why ensure_linked() cannot be automated
+- build.rs auto-generates FORCE_LINK from Cargo.toml — single source of truth
+- FORCE_LINK + ensure_linked() — defeat linker DCE on production binaries ([#520](https://github.com/OxideAV/oxideav-format-all/pull/520))
+- Initial commit: virtual aggregator with deps on every sibling
+
 ### Added
 
 - Initial scaffolding: virtual aggregator crate with deps on every oxideav
